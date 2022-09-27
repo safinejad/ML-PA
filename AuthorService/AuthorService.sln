@@ -11,19 +11,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RMQMessageBusClient", "..\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorContracts", "AuthorContracts\AuthorContracts.csproj", "{0AC70D39-F62F-4572-8000-DB41FC3074D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeRepo", "..\Common\FakeRepo\FakeRepo.csproj", "{6E9398F9-6A34-4AA2-897F-39A01D6C3221}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FakeRepo", "..\Common\FakeRepo\FakeRepo.csproj", "{6E9398F9-6A34-4AA2-897F-39A01D6C3221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorBusinessLogic", "AuthorBusinessLogic\AuthorBusinessLogic.csproj", "{3B3D5BA8-1813-47ED-8E88-1164738AEF2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorBusinessLogic", "AuthorBusinessLogic\AuthorBusinessLogic.csproj", "{3B3D5BA8-1813-47ED-8E88-1164738AEF2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookService", "..\BookService\BookService\BookService.csproj", "{73000EF8-687A-48D5-92C1-4B159DBDEC55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookService", "..\BookService\BookService\BookService.csproj", "{73000EF8-687A-48D5-92C1-4B159DBDEC55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookBusinessLogic", "..\BookService\BookBusinessLogic\BookBusinessLogic.csproj", "{BB89B5BB-9F59-447D-B98E-00B8BADAC54C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookBusinessLogic", "..\BookService\BookBusinessLogic\BookBusinessLogic.csproj", "{BB89B5BB-9F59-447D-B98E-00B8BADAC54C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookContracts", "BookContracts\BookContracts.csproj", "{0336DFFA-5D82-4D87-B4A4-B509E78888E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookContracts", "BookContracts\BookContracts.csproj", "{0336DFFA-5D82-4D87-B4A4-B509E78888E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Author", "Author", "{BA63F387-80F5-40B9-BE34-E05C176D5CB8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Book", "Book", "{FC234B04-7359-4BB3-8573-13D359D2A747}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "..\Common\Infrastructure\Infrastructure.csproj", "{FD4222F3-C39B-4F67-A0FE-9F1ABFC34359}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{0336DFFA-5D82-4D87-B4A4-B509E78888E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0336DFFA-5D82-4D87-B4A4-B509E78888E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0336DFFA-5D82-4D87-B4A4-B509E78888E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD4222F3-C39B-4F67-A0FE-9F1ABFC34359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD4222F3-C39B-4F67-A0FE-9F1ABFC34359}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD4222F3-C39B-4F67-A0FE-9F1ABFC34359}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD4222F3-C39B-4F67-A0FE-9F1ABFC34359}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{73000EF8-687A-48D5-92C1-4B159DBDEC55} = {FC234B04-7359-4BB3-8573-13D359D2A747}
 		{BB89B5BB-9F59-447D-B98E-00B8BADAC54C} = {FC234B04-7359-4BB3-8573-13D359D2A747}
 		{0336DFFA-5D82-4D87-B4A4-B509E78888E9} = {FC234B04-7359-4BB3-8573-13D359D2A747}
+		{FD4222F3-C39B-4F67-A0FE-9F1ABFC34359} = {BC802800-5125-4530-9B7E-0F1003280F3A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17D69005-1129-4FB5-A76E-8A67A19D309E}

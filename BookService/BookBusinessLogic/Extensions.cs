@@ -2,7 +2,6 @@
 using FakeRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RMQMessageBusClient;
 
 namespace BookBusinessLogic
 {
@@ -15,11 +14,9 @@ namespace BookBusinessLogic
             services.AddScoped<IBookBusinessService, BookBusinessService>();
             services.Configure<AuthorConsumerConfig>(config =>
                 configuration.GetSection("AuthorConsumerConfig").Bind(config));
+            services.Configure<BookPublisherConfig>(config =>
+                configuration.GetSection("BookPublisherConfig").Bind(config));
             services.AddHostedService<EventProcessingAuthorService>();
         }
-    }
-    public class AuthorConsumerConfig : RMQConsumerConfig
-    {
-
     }
 }

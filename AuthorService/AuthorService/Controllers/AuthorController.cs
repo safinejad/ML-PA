@@ -23,12 +23,20 @@ namespace AuthorService.Controllers
             _authorService = authorService;
             
         }
-        [Route("s/{partialKeyword}")]
+        [Route("s/{partialKeyword?}")]
         [HttpGet]
-        public ActionResult<IEnumerable<AuthorGetDto>> SearchAuthorsByName(string partialKeyword)
+        public ActionResult<IEnumerable<AuthorGetDto>> SearchAuthorsByName(string partialKeyword = "")
         {
             var authors = _authorService.SearchAuthorsByName(partialKeyword);
             var converted = _autoMapper.Map<IEnumerable<AuthorGetDto>>(authors);
+            return Ok(converted);
+        }
+        [Route("{id}/books")]
+        [HttpGet]
+        public ActionResult<IEnumerable<AuthorGetDto>> GetAuthorBook(int id)
+        {
+            var authors = _authorService.GetAuthorBooks(id);
+            var converted = _autoMapper.Map<IEnumerable<BookGetDto>>(authors);
             return Ok(converted);
         }
         [Route("{id}")]

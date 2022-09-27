@@ -19,6 +19,7 @@ namespace RMQMessageBusClient
         public delegate void OnMessageReceivedEventHandler(TMessage message, string type, string messageId);
 
         public event OnMessageReceivedEventHandler OnMessageReceived;
+
         public RMQConsumer(RMQConsumerConfig config) : base(config)
         {
             _cancellationToken = new CancellationTokenSource();
@@ -31,7 +32,7 @@ namespace RMQMessageBusClient
         {
             if (dequeuedItemBody == null || dequeuedItemBody.Length < 1) return default;
             var bodyStr = System.Text.Encoding.UTF8.GetString(dequeuedItemBody);
-            if (typeof(TMessage).IsAssignableFrom(typeof(string))) return (TMessage)(object)bodyStr;//To Be Cached.
+            if (typeof(TMessage).IsAssignableFrom(typeof(string))) return (TMessage)(object)bodyStr; //To Be Cached.
             if (typeof(TMessage).IsPrimitive)
             {
                 return (TMessage)System.Convert.ChangeType(bodyStr, typeof(TMessage));
@@ -64,8 +65,16 @@ namespace RMQMessageBusClient
                 EventHandler<BasicDeliverEventArgs> consumerOnReceived = (sender, dequeuedItem) =>
                 {
                     var msg = Deserialize(dequeuedItem.Body.ToArray());
-                    this.OnMessageReceived.Invoke(msg, dequeuedItem.BasicProperties.Type,
-                        dequeuedItem.BasicProperties.MessageId);
+                    try
+                    {
+                        this.OnMessageReceived.Invoke(msg, dequeuedItem.BasicProperties.Type,
+                            dequeuedItem.BasicProperties.MessageId);
+                    }
+                    catch (Exception ex)
+                    {
+                        //noop
+                    }
+
                     Channel.BasicAck(dequeuedItem.DeliveryTag, false);
                 };
                 if (_cancellationToken.IsCancellationRequested) return;
@@ -96,4 +105,6 @@ namespace RMQMessageBusClient
 
 
     }
+
+    
 }

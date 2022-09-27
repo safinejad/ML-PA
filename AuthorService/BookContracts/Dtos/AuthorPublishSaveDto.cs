@@ -1,9 +1,13 @@
 ﻿namespace BookContracts.Dtos
 {
-
-    public class AuthorPublishSaveDto
+    public class BookConsumerSaveDto
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
+        public int ExternalAuthorId { get; set; }
+    }
+    public class BookConsumerDeleteDto
+    {
+        public long ExternalId { get; set; }
     }
 }

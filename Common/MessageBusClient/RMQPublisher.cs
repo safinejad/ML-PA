@@ -21,7 +21,7 @@ namespace RMQMessageBusClient
                 $"RMQPublisher[{config.QueueName}][{Process.GetCurrentProcess().Id}]";
         }
 
-        public void Publish<TMessage>(TMessage message, string messageId = "", MessageEventTypeEnum? type = null)
+        public void Publish<TMessage>(TMessage message, string messageId = "", MessageEventTypeEnum? type = null, bool typeToTopic = false)
         {
 
             if (!(Channel?.IsOpen ?? false)) Setup();
@@ -44,9 +44,16 @@ namespace RMQMessageBusClient
             var bytes = new ReadOnlyMemory<byte>(Serialize(message));
             if (!string.IsNullOrWhiteSpace(Config.Exchange))
             {
-                foreach (var configBindingRoutingKey in Config.BindingRoutingKeys)
+                if (typeToTopic)
                 {
-                    Channel.BasicPublish(Config.Exchange, configBindingRoutingKey, props, bytes);
+                    Channel.BasicPublish(Config.Exchange, props.Type, props, bytes);
+                }
+                else
+                {
+                    foreach (var configBindingRoutingKey in Config.BindingRoutingKeys)
+                    {
+                        Channel.BasicPublish(Config.Exchange, configBindingRoutingKey, props, bytes);
+                    }
                 }
             }
             else

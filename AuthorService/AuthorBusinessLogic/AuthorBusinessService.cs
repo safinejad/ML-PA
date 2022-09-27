@@ -13,10 +13,12 @@ namespace AuthorBusinessLogic
         private readonly FakeRepo<Author> _authRepo;
         private readonly RMQPublisher _authorProducer;
         private readonly IMapper _autoMapper;
+        private readonly FakeRepo<Book> _bookRepo;
 
-        public AuthorBusinessService(FakeRepo<Author> authRepo, IOptions<AuthorPublisherConfig> publisherConfig, IMapper autoMapper)
+        public AuthorBusinessService(FakeRepo<Author> authRepo, FakeRepo<Book> bookRepo, IOptions<AuthorPublisherConfig> publisherConfig, IMapper autoMapper)
         {
-            _authRepo = authRepo;
+            _authRepo = authRepo; //These Repos are fake - Each Service Has its own Database (which is implemented by FakeRepo<T>)
+            _bookRepo = bookRepo;
             _authorProducer = new RMQPublisher(publisherConfig.Value);
             _autoMapper = autoMapper;
         }
@@ -49,8 +51,13 @@ namespace AuthorBusinessLogic
             {
                 throw new InvalidDataException("Author not found");
             }
-            _authorProducer.Publish(id, type: MessageEventTypeEnum.Delete);
+
+            if (_bookRepo.GetAll().Any(x => x.Author.Id == id))
+            {
+                throw new InvalidOperationException("Cannot delete Author when there books assigned to it.");
+            }
             _authRepo.Delete(author);
+            _authorProducer.Publish(id, type: MessageEventTypeEnum.Delete);
         }
         public Author GetAuthorById(int id)
         {
@@ -58,12 +65,48 @@ namespace AuthorBusinessLogic
         }
         public IEnumerable<Author> SearchAuthorsByName(string partialKeyword)
         {
-            return _authRepo.GetAll().Where(x =>
-                x.Name.Contains(partialKeyword, StringComparison.InvariantCultureIgnoreCase));
+            var all=_authRepo.GetAll();
+            if (!string.IsNullOrWhiteSpace(partialKeyword))
+            {
+                return all.Where(x =>
+                    x.Name.Contains(partialKeyword, StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            return all;
         }
-        public Author GetBooks(int id)
+
+        public void DeleteBookByExternalId(long externalId)
         {
-            return _authRepo.GetAll().FirstOrDefault(x => x.Id == id)!;
+            var book = _bookRepo.GetAll().FirstOrDefault(x => x.ExternalId == externalId);
+            if (book == null)
+            {
+                throw new InvalidDataException("External Id  not found!");
+            }
+            _bookRepo.Delete(book);
+        }
+
+        public Book SaveBook(Book book)
+        {
+            book.Author = _authRepo.GetAll().FirstOrDefault(x => x.Id == book.Author.Id); //For Fake Repo
+            var already = _bookRepo.GetAll().FirstOrDefault(x => x.ExternalId == book.ExternalId);
+            if (already == null)
+            {
+                var id = _bookRepo.Create(book);
+                book.Id = id; //For FakeRepo
+                return _bookRepo.GetAll().FirstOrDefault(x => x.Id == id);
+            }
+            else
+            {
+                already.Name = book.Name;
+                already.Author = book.Author;
+                _bookRepo.Update(already);
+                return already;
+            }
+        }
+
+        public IEnumerable<Book> GetAuthorBooks(int authorId)
+        {
+            return _bookRepo.GetAll().Where(x => x.Author.Id == authorId);
         }
     }
 }

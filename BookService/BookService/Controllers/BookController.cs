@@ -20,9 +20,9 @@ namespace BookService.Controllers
             _bookService = bookService;
 
         }
-        [Route("s/{partialKeyword}")]
+        [Route("s/{partialKeyword?}")]
         [HttpGet]
-        public ActionResult<IEnumerable<BookGetDto>> SearchBooksByName(string partialKeyword)
+        public ActionResult<IEnumerable<BookGetDto>> SearchBooksByName(string partialKeyword = "")
         {
             var books = _bookService.SearchBooksByName(partialKeyword);
             var converted = _autoMapper.Map<IEnumerable<BookGetDto>>(books);
@@ -36,12 +36,26 @@ namespace BookService.Controllers
             var converted = _autoMapper.Map<BookGetDto>(book);
             return Ok(converted);
         }
+        [Route("{id}")]
+        [HttpDelete]
+        public ActionResult<BookGetDto> DeleteBookById(int id)
+        {
+            try
+            {
+                _bookService.DeleteBookById(id);
+            }
+            catch (InvalidDataException ex)
+            {
+                //log
+                return NotFound();
+            }
+
+            return Ok();
+        }
         [HttpPost]
         public ActionResult<BookGetDto> CreateBook(BookSaveDto book)
         {
             var converted = _autoMapper.Map<Book>(book);
-            var author = _bookService.GetAuthorByExternalId(book.ExternalAuthorId);
-            converted.Author = author;
             var created = _bookService.SaveBook(converted);
             var createdConverted = _autoMapper.Map<BookGetDto>(created);
             return Ok(createdConverted);
@@ -50,14 +64,11 @@ namespace BookService.Controllers
         public ActionResult<BookGetDto> EditBook(BookUpdateDto book)
         {
             var converted = _autoMapper.Map<Book>(book);
-            var author = _bookService.GetAuthorByExternalId(book.ExternalAuthorId);
-            if (author == null) return NotFound(nameof(book.ExternalAuthorId));
-            converted.Author = author;
             var edited = _bookService.SaveBook(converted);
             var editedConverted = _autoMapper.Map<BookGetDto>(edited);
             return Ok(editedConverted);
         }
-        [Route("s/authors/{partialKeyword}")]
+        [Route("s/authors/{partialKeyword?}")]
         [HttpGet]
         public ActionResult<IEnumerable<AuthorGetDto>> SearchAuthorsByName(string partialKeyword)
         {

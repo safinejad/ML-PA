@@ -62,7 +62,7 @@ namespace BookBusinessLogic
 
         private void SaveAuthor(string message)
         {
-            var authorDto = JsonSerializer.Deserialize<AuthorPublishSaveDto>(message);
+            var authorDto = JsonSerializer.Deserialize<AuthorConsumerSaveDto>(message);
             var author = _mapper.Map<Author>(authorDto);
             using var scope = _scope.CreateScope();
             var bookBusinessService = scope.ServiceProvider.GetRequiredService<IBookBusinessService>();

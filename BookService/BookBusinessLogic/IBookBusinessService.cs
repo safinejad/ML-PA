@@ -11,7 +11,6 @@ public interface IBookBusinessService
     Author SaveAuthor(Author author);
     void DeleteAuthorByExternalId(long id);
     void DeleteBookById(long id);
-    Book CreateBook(Book book);
 
     Author GetAuthorByExternalId(int bookExternalAuthorId);
     IEnumerable<Author> SearchAuthorsByName(string partialKeyword);
