@@ -79,5 +79,11 @@ namespace BookBusinessLogic
         {
             return _authRepo.GetAll().FirstOrDefault(x => x.ExternalId == externalAuthorId);
         }
+
+        public IEnumerable<Author> SearchAuthorsByName(string partialKeyword)
+        {
+            return _authRepo.GetAll().Where(x =>
+                x.Name.Contains(partialKeyword, StringComparison.InvariantCultureIgnoreCase));
+        }
     }
 }

@@ -57,5 +57,13 @@ namespace BookService.Controllers
             var editedConverted = _autoMapper.Map<BookGetDto>(edited);
             return Ok(editedConverted);
         }
+        [Route("s/authors/{partialKeyword}")]
+        [HttpGet]
+        public ActionResult<IEnumerable<AuthorGetDto>> SearchAuthorsByName(string partialKeyword)
+        {
+            var authors = _bookService.SearchAuthorsByName(partialKeyword);
+            var converted = _autoMapper.Map<IEnumerable<AuthorGetDto>>(authors);
+            return Ok(converted);
+        }
     }
 }

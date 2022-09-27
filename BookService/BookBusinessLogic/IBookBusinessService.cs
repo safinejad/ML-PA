@@ -14,4 +14,5 @@ public interface IBookBusinessService
     Book CreateBook(Book book);
 
     Author GetAuthorByExternalId(int bookExternalAuthorId);
+    IEnumerable<Author> SearchAuthorsByName(string partialKeyword);
 }

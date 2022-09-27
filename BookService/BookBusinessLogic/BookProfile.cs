@@ -13,6 +13,7 @@ public class BookProfile : Profile
             .ForMember(dest => dest.AuthorId, opt => opt.MapFrom(src => src.Author.Id));
         CreateMap<BookSaveDto, Book>();;
         CreateMap<BookUpdateDto, Book>();
+        CreateMap<Author, AuthorGetDto>();
 
         CreateMap<AuthorPublishSaveDto, Author>()
             .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.Id));

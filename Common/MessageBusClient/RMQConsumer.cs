@@ -8,7 +8,7 @@ namespace RMQMessageBusClient
     public class RMQConsumer<TMessage> : RMQClientBase
     {
         private bool _initialized;
-        private readonly object _lockHandleForStartStop;
+        private readonly object _lockHandleForStartStop = new Object();
         private CancellationTokenSource _cancellationToken;
         private EventingBasicConsumer _consumer;
         private readonly string _name;
@@ -21,6 +21,7 @@ namespace RMQMessageBusClient
         public event OnMessageReceivedEventHandler OnMessageReceived;
         public RMQConsumer(RMQConsumerConfig config) : base(config)
         {
+            _cancellationToken = new CancellationTokenSource();
             _name =
                 $"RMQConsumer[{config.QueueName}][{typeof(TMessage).Name}][{Process.GetCurrentProcess().Id}]";
             State = RMQClientStateEnum.NotStarted;
@@ -59,9 +60,10 @@ namespace RMQMessageBusClient
                     var msg = Deserialize(dequeuedItem.Body.ToArray());
                     this.OnMessageReceived.Invoke(msg, dequeuedItem.BasicProperties.Type,
                         dequeuedItem.BasicProperties.MessageId);
+                    Channel.BasicAck(dequeuedItem.DeliveryTag, false);
                 };
                 if (_cancellationToken.IsCancellationRequested) return;
-
+                _consumer.Received += consumerOnReceived;
                 _consumer.Registered += (sender, args) => { State = RMQClientStateEnum.Connected; };
                 _consumer.Shutdown += (sender, args) => { State = RMQClientStateEnum.ShutDown; };
                 _consumerTag = Channel.BasicConsume(_consumer, Config.QueueName, false, _name);
