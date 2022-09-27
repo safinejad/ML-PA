@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AuthorService\BookContracts\BookContracts.csproj" />
     <ProjectReference Include="..\..\Common\FakeRepo\FakeRepo.csproj" />
     <ProjectReference Include="..\BookBusinessLogic\BookBusinessLogic.csproj" />
+    <ProjectReference Include="..\BookContracts\BookContracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AuthorService\BookContracts\BookContracts.csproj" />
     <ProjectReference Include="..\..\Common\FakeRepo\FakeRepo.csproj" />
     <ProjectReference Include="..\..\Common\MessageBusClient\RMQMessageBusClient.csproj" />
+    <ProjectReference Include="..\BookContracts\BookContracts.csproj" />
   </ItemGroup>
 
 </Project>
