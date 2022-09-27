@@ -64,9 +64,16 @@ namespace BookService.Controllers
         public ActionResult<BookGetDto> EditBook(BookUpdateDto book)
         {
             var converted = _autoMapper.Map<Book>(book);
-            var edited = _bookService.SaveBook(converted);
-            var editedConverted = _autoMapper.Map<BookGetDto>(edited);
-            return Ok(editedConverted);
+            try
+            {
+                var edited = _bookService.SaveBook(converted);
+                var editedConverted = _autoMapper.Map<BookGetDto>(edited);
+                return Ok(editedConverted);
+            }
+            catch (InvalidDataException ex)
+            {
+                return NotFound();
+            }
         }
         [Route("s/authors/{partialKeyword?}")]
         [HttpGet]

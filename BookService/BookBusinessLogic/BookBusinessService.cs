@@ -27,6 +27,7 @@ namespace BookBusinessLogic
             if (book == null) throw new ArgumentNullException(nameof(book));
             var author = _authRepo.GetAll().FirstOrDefault(x => x.Id == book.Author.Id);
             if (author != null) book.Author = author; //For FakeRepo
+            //TODO: throw exception on author not found.
             if (book.Id < 1)
             {
                 var id = _bookRepo.Create(book) * 100;

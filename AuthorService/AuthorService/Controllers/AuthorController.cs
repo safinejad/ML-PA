@@ -59,6 +59,10 @@ namespace AuthorService.Controllers
             {
                 return NotFound(id);
             }
+            catch (InvalidOperationException ex)
+            {
+                return UnprocessableEntity(ex.Message);
+            }
 
             return Ok();
         }
@@ -66,9 +70,17 @@ namespace AuthorService.Controllers
         public ActionResult<AuthorGetDto> CreateAuthor(AuthorSaveDto author)
         {
             var converted = _autoMapper.Map<Author>(author);
-            var authorCreated = _authorService.SaveAuthor(converted);
-            var createdConverted = _autoMapper.Map<AuthorGetDto>(authorCreated);
-            return Ok(createdConverted);
+            try
+            {
+                var authorCreated = _authorService.SaveAuthor(converted);
+                var createdConverted = _autoMapper.Map<AuthorGetDto>(authorCreated);
+                return Ok(createdConverted);
+            }
+            catch (InvalidDataException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
         [HttpPut]
         public ActionResult<AuthorGetDto> EditAuthor(AuthorUpdateDto author)

@@ -33,7 +33,7 @@ namespace AuthorBusinessLogic
             else
             {
                 var oldAuthor = _authRepo.GetAll().FirstOrDefault(x => x.Id == author.Id);
-                if (oldAuthor == null) throw new InvalidDataException(nameof(author.Id));
+                if (oldAuthor == null) throw new InvalidDataException(nameof(author) + " " + nameof(author.Id));
                 oldAuthor.AuthorGuid = author.AuthorGuid;
                 oldAuthor.Name = author.Name;
                 _authRepo.Update(oldAuthor);

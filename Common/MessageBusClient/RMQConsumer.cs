@@ -65,16 +65,8 @@ namespace RMQMessageBusClient
                 EventHandler<BasicDeliverEventArgs> consumerOnReceived = (sender, dequeuedItem) =>
                 {
                     var msg = Deserialize(dequeuedItem.Body.ToArray());
-                    try
-                    {
-                        this.OnMessageReceived.Invoke(msg, dequeuedItem.BasicProperties.Type,
-                            dequeuedItem.BasicProperties.MessageId);
-                    }
-                    catch (Exception ex)
-                    {
-                        //noop
-                    }
-
+                    OnMessageReceived.Invoke(msg, dequeuedItem.BasicProperties.Type,
+                        dequeuedItem.BasicProperties.MessageId);
                     Channel.BasicAck(dequeuedItem.DeliveryTag, false);
                 };
                 if (_cancellationToken.IsCancellationRequested) return;
