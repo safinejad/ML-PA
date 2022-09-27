@@ -5,6 +5,12 @@ using RabbitMQ.Client.Exceptions;
 
 namespace RMQMessageBusClient
 {
+    public enum MessageEventTypeEnum
+    {
+        Save = 1,
+        Delete = 2
+    }
+
     public class RMQPublisher: RMQClientBase
     {
         private readonly string _name;
@@ -15,7 +21,7 @@ namespace RMQMessageBusClient
                 $"RMQPublisher[{config.QueueName}][{Process.GetCurrentProcess().Id}]";
         }
 
-        public void Publish<TMessage>(TMessage message, string messageId = "")
+        public void Publish<TMessage>(TMessage message, string messageId = "", MessageEventTypeEnum? type = null)
         {
 
             if (!(Channel?.IsOpen ?? false)) Setup();
@@ -32,7 +38,7 @@ namespace RMQMessageBusClient
             int rmqFailureCount = 0;
             var props = Channel.CreateBasicProperties();
             props.MessageId = messageId;
-            props.Type = typeof(TMessage).Name;
+            props.Type = type.HasValue && type.Value > 0 ? Enum.GetName(type.Value) : typeof(TMessage).Name;
             props.AppId = _name;
             props.Persistent = true;
             var bytes = new ReadOnlyMemory<byte>(Serialize(message));
@@ -52,7 +58,16 @@ namespace RMQMessageBusClient
 
         private byte[] Serialize(object message)
         {
-            var msgJson = System.Text.Json.JsonSerializer.Serialize(message);
+            string msgJson;
+            if (message.GetType().IsAssignableFrom(typeof(string)) || message.GetType().IsPrimitive) //To Be cached
+            {
+                msgJson = message.ToString();
+            }
+            else
+            {
+                msgJson = System.Text.Json.JsonSerializer.Serialize(message);
+            }
+
             return System.Text.Encoding.UTF8.GetBytes(msgJson);
         }
     }

@@ -8,7 +8,7 @@ public interface IBookBusinessService
     Book GetBookById(long id);
     IEnumerable<Book> SearchBooksByName(string partialKeyword);
 
-    Author CreateAuthor(Author author);
+    Author SaveAuthor(Author author);
     void DeleteAuthorByExternalId(long id);
     void DeleteBookById(long id);
     Book CreateBook(Book book);

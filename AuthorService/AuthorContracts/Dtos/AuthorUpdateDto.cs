@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AuthorContracts.Dtos;
-
-public class AuthorUpdateDto: AuthorSaveDto
+namespace AuthorContracts.Dtos
 {
-    [Required]
-    public int Id { get; set; }
+    public class AuthorUpdateDto : AuthorSaveDto
+    {
+        [Required] public int Id { get; set; }
+    }
 }

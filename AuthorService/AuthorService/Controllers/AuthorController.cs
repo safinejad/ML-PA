@@ -39,6 +39,21 @@ namespace AuthorService.Controllers
             var converted = _autoMapper.Map<AuthorGetDto>(author);
             return Ok(converted);
         }
+        [Route("{id}")]
+        [HttpDelete]
+        public ActionResult<AuthorGetDto> DeleteAuthorById(int id)
+        {
+            try
+            {
+                _authorService.DeleteAuthorById(id);
+            }
+            catch (InvalidDataException ex)
+            {
+                return NotFound(id);
+            }
+
+            return Ok();
+        }
         [HttpPost]
         public ActionResult<AuthorGetDto> CreateAuthor(AuthorSaveDto author)
         {
@@ -50,10 +65,23 @@ namespace AuthorService.Controllers
         [HttpPut]
         public ActionResult<AuthorGetDto> EditAuthor(AuthorUpdateDto author)
         {
+            if (author == null || author.Id < 1)
+            {
+                return BadRequest();
+            }
+
             var converted = _autoMapper.Map<Author>(author);
-            var authorEdited = _authorService.SaveAuthor(converted);
-            var editedConverted = _autoMapper.Map<AuthorGetDto>(authorEdited);
-            return Ok(editedConverted);
+            try
+            {
+                var authorEdited = _authorService.SaveAuthor(converted);
+                var editedConverted = _autoMapper.Map<AuthorGetDto>(authorEdited);
+                return Ok(editedConverted);
+            }
+            catch (InvalidDataException ex)
+            {
+                //log
+                return NotFound(author.Id);
+            }
         }
     }
 }

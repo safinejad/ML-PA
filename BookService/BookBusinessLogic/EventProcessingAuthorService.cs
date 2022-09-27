@@ -37,13 +37,13 @@ namespace BookBusinessLogic
                 return;
             }
 
-            var eventType = (AuthorMessageEventTypeEnum)Enum.Parse(typeof(AuthorMessageEventTypeEnum), type);
+            var eventType = (MessageEventTypeEnum)Enum.Parse(typeof(MessageEventTypeEnum), type);
             switch (eventType)
             {
-                case AuthorMessageEventTypeEnum.Create:
-                    CreateAuthor(message);
+                case MessageEventTypeEnum.Save:
+                    SaveAuthor(message);
                     break;
-                case AuthorMessageEventTypeEnum.Delete:
+                case MessageEventTypeEnum.Delete:
                     var externalId = long.Parse(message);
                     DeleteAuthor(externalId);
                     break;
@@ -60,13 +60,13 @@ namespace BookBusinessLogic
             bookBusinessService.DeleteAuthorByExternalId(externalId);
         }
 
-        private void CreateAuthor(string message)
+        private void SaveAuthor(string message)
         {
             var authorDto = JsonSerializer.Deserialize<AuthorPublishSaveDto>(message);
             var author = _mapper.Map<Author>(authorDto);
             using var scope = _scope.CreateScope();
             var bookBusinessService = scope.ServiceProvider.GetRequiredService<IBookBusinessService>();
-            bookBusinessService.CreateAuthor(author);
+            bookBusinessService.SaveAuthor(author);
         }
 
 

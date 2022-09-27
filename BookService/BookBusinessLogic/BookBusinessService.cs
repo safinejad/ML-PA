@@ -45,10 +45,20 @@ namespace BookBusinessLogic
         }
 
 
-        public Author CreateAuthor(Author author)
+        public Author SaveAuthor(Author author)
         {
-            var id = _authRepo.Create(author);
-            return _authRepo.GetAll().FirstOrDefault(x => x.Id == id);
+            var already = _authRepo.GetAll().FirstOrDefault(x => x.ExternalId == author.ExternalId);
+            if (already == null)
+            {
+                var id = _authRepo.Create(author);
+                return _authRepo.GetAll().FirstOrDefault(x => x.Id == id);
+            }
+            else
+            {
+                already.Name = author.Name;
+                _authRepo.Update(already);
+                return already;
+            }
         }
 
         public void DeleteAuthorByExternalId(long exId)

@@ -31,7 +31,13 @@ namespace RMQMessageBusClient
         {
             if (dequeuedItemBody == null || dequeuedItemBody.Length < 1) return default;
             var bodyStr = System.Text.Encoding.UTF8.GetString(dequeuedItemBody);
-            if (typeof(TMessage).IsAssignableFrom(typeof(string))) return (TMessage)(object)bodyStr;
+            if (typeof(TMessage).IsAssignableFrom(typeof(string))) return (TMessage)(object)bodyStr;//To Be Cached.
+            if (typeof(TMessage).IsPrimitive)
+            {
+                return (TMessage)System.Convert.ChangeType(bodyStr, typeof(TMessage));
+
+            }
+
             return System.Text.Json.JsonSerializer.Deserialize<TMessage>(bodyStr);
         }
 

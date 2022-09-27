@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AuthorContracts.Dtos;
-
-public class AuthorSaveDto
+namespace AuthorContracts.Dtos
 {
-    [Required]
-    public string Name { get; set; }
-    [Required]
-    public string AuthorGuid { get; set; }
+
+    public class AuthorSaveDto
+    {
+        [Required] public string Name { get; set; }
+        [Required] public string AuthorGuid { get; set; }
+    }
 }

@@ -38,10 +38,20 @@ namespace AuthorBusinessLogic
                 author = oldAuthor; //for fake repo
             }
             var converted = _autoMapper.Map<AuthorPublishSaveDto>(author);
-            _authorProducer.Publish(converted);
+            _authorProducer.Publish(converted, type: MessageEventTypeEnum.Save);
             return author;
         }
 
+        public void DeleteAuthorById(int id)
+        {
+            var author = GetAuthorById(id);
+            if (author == null)
+            {
+                throw new InvalidDataException("Author not found");
+            }
+            _authorProducer.Publish(id, type: MessageEventTypeEnum.Delete);
+            _authRepo.Delete(author);
+        }
         public Author GetAuthorById(int id)
         {
             return _authRepo.GetAll().FirstOrDefault(x => x.Id == id)!;

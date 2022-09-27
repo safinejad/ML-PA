@@ -1,15 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BookContracts;
-
-public class Author
+namespace BookContracts
 {
-    [Key]
-    [Required]
-    public int Id { get; set; }
-    [Required]
-    public string Name { get; set; }
-    [Required]
-    public int ExternalId { get; set; }
 
+    public class Author
+    {
+        [Key] [Required] public int Id { get; set; }
+        [Required] public string Name { get; set; }
+        [Required] public int ExternalId { get; set; }
+
+    }
 }
