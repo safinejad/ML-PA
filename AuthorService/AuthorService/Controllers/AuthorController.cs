@@ -23,7 +23,7 @@ namespace AuthorService.Controllers
             _authorService = authorService;
             
         }
-        [Route("s/{nameSearch}")]
+        [Route("s/{partialKeyword}")]
         [HttpGet]
         public ActionResult<IEnumerable<AuthorGetDto>> SearchAuthorsByName(string partialKeyword)
         {
