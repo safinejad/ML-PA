@@ -77,7 +77,7 @@ namespace BookService.Controllers
         }
         [Route("s/authors/{partialKeyword?}")]
         [HttpGet]
-        public ActionResult<IEnumerable<AuthorGetDto>> SearchAuthorsByName(string partialKeyword)
+        public ActionResult<IEnumerable<AuthorGetDto>> SearchAuthorsByName(string partialKeyword="")
         {
             var authors = _bookService.SearchAuthorsByName(partialKeyword);
             var converted = _autoMapper.Map<IEnumerable<AuthorGetDto>>(authors);
