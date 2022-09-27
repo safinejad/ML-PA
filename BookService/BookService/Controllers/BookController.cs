@@ -20,7 +20,7 @@ namespace BookService.Controllers
             _bookService = bookService;
 
         }
-        [Route("{nameSearch}")]
+        [Route("s/{nameSearch}")]
         [HttpGet]
         public ActionResult<IEnumerable<BookGetDto>> SearchBooksByName(string partialKeyword)
         {
